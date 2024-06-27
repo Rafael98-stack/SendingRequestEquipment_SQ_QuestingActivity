@@ -2,7 +2,7 @@
   <x:Members>
     <x:Property Name="In_Dt_DetailsOrder" Type="InArgument(sd:DataTable)" />
   </x:Members>
-  <sap:VirtualizedContainerService.HintSize>1114.4,3973.6</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>1114.4,3877.6</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
@@ -66,6 +66,11 @@
       <x:String>System.Numerics</x:String>
       <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
       <x:String>System.Text.RegularExpressions</x:String>
+      <x:String>System.Windows.Documents</x:String>
+      <x:String>System.Windows.Media.Animation</x:String>
+      <x:String>System.Windows</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Windows.Threading</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -150,9 +155,11 @@
       <AssemblyReference>Microsoft.VisualBasic.Forms</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic.Core</AssemblyReference>
       <AssemblyReference>System.Text.RegularExpressions</AssemblyReference>
+      <AssemblyReference>PresentationUI</AssemblyReference>
+      <AssemblyReference>System.Windows.Presentation</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap:VirtualizedContainerService.HintSize="862.4,3908.8" sap2010:WorkflowViewState.IdRef="Sequence_4">
+  <Sequence sap:VirtualizedContainerService.HintSize="862.4,3812.8" sap2010:WorkflowViewState.IdRef="Sequence_4">
     <Sequence.Variables>
       <Variable x:TypeArguments="umm:Office365Message" Name="EmailMessage" />
       <Variable x:TypeArguments="s:String[]" Name="TypeOfEquipment">
@@ -167,13 +174,13 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <umab:ExchangeApplicationCard ConnectionAccountName="{x:Null}" Account="rafael.casapao@acpsystemsrl.onmicrosoft.com" ApplicationId="{x:Null}" ConnectionId="{x:Null}" DisplayName="Use Outlook 365" EmailAddress="rafael.casapao@acpsystemsrl.onmicrosoft.com" sap:VirtualizedContainerService.HintSize="800,3820" sap2010:WorkflowViewState.IdRef="ExchangeApplicationCard_3" SharedMailbox="" TenantId="{x:Null}" UseConnectionService="False">
+    <umab:ExchangeApplicationCard ConnectionAccountName="{x:Null}" Account="rafael.casapao@acpsystemsrl.onmicrosoft.com" ApplicationId="{x:Null}" ConnectionId="{x:Null}" DisplayName="Use Outlook 365" EmailAddress="rafael.casapao@acpsystemsrl.onmicrosoft.com" sap:VirtualizedContainerService.HintSize="800,3724" sap2010:WorkflowViewState.IdRef="ExchangeApplicationCard_3" SharedMailbox="" TenantId="{x:Null}" UseConnectionService="False">
       <umab:ExchangeApplicationCard.Body>
         <ActivityAction x:TypeArguments="um:IMailQuickHandle">
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="um:IMailQuickHandle" Name="Exchange" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="766.4,3572" sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="766.4,3476" sap2010:WorkflowViewState.IdRef="Sequence_3">
             <Sequence.Variables>
               <Variable x:TypeArguments="scg:List(snm:MailMessage)" Name="RetrievedEmails" />
             </Sequence.Variables>
@@ -182,7 +189,7 @@
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <umab:ForEachEmailX DisplayName="For Each Email" sap:VirtualizedContainerService.HintSize="704,3485.6" sap2010:WorkflowViewState.IdRef="ForEachEmailX_1" IncludeSubfolders="False" NumberOfEmailsLimit="100" UnreadOnly="False" WithAttachmentsOnly="False">
+            <umab:ForEachEmailX DisplayName="For Each Email" sap:VirtualizedContainerService.HintSize="704,3389.6" sap2010:WorkflowViewState.IdRef="ForEachEmailX_1" IncludeSubfolders="False" NumberOfEmailsLimit="100" UnreadOnly="False" WithAttachmentsOnly="False">
               <umab:ForEachEmailX.Body>
                 <ActivityAction x:TypeArguments="snm:MailMessage, x:Int32">
                   <ActivityAction.Argument1>
@@ -191,7 +198,7 @@
                   <ActivityAction.Argument2>
                     <DelegateInArgument x:TypeArguments="x:Int32" Name="CurrentIndex" />
                   </ActivityAction.Argument2>
-                  <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="670.4,3198.4" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                  <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="670.4,3102.4" sap2010:WorkflowViewState.IdRef="Sequence_5">
                     <Sequence.Variables>
                       <Variable x:TypeArguments="scg:List(x:String)" Name="RetrievedTextList" />
                     </Sequence.Variables>
@@ -200,7 +207,7 @@
                         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                       </scg:Dictionary>
                     </sap:WorkflowViewStateService.ViewState>
-                    <If DisplayName="If Current Email is Empty (&quot;Body&quot; is Empty)" sap:VirtualizedContainerService.HintSize="608,3112" sap2010:WorkflowViewState.IdRef="If_1">
+                    <If DisplayName="If Current Email is Empty (&quot;Body&quot; is Empty)" sap:VirtualizedContainerService.HintSize="608,3016" sap2010:WorkflowViewState.IdRef="If_1">
                       <If.Condition>
                         <InArgument x:TypeArguments="x:Boolean">
                           <VisualBasicValue x:TypeArguments="x:Boolean" ExpressionText="CurrentMail.Body Is Nothing">
@@ -237,7 +244,7 @@
                         </Sequence>
                       </If.Then>
                       <If.Else>
-                        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="574.4,2698.4" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="574.4,2602.4" sap2010:WorkflowViewState.IdRef="Sequence_13">
                           <Sequence.Variables>
                             <Variable x:TypeArguments="x:String" Name="Equipment" />
                             <Variable x:TypeArguments="x:String" Name="Mandante" />
@@ -269,7 +276,7 @@
                               </InArgument>
                             </ui:LogMessage.Message>
                           </ui:LogMessage>
-                          <Sequence DisplayName="Sequence Retrieve Mandante &amp; Equipment" sap:VirtualizedContainerService.HintSize="512,2263.2" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                          <Sequence DisplayName="Sequence Retrieve Mandante &amp; Equipment" sap:VirtualizedContainerService.HintSize="512,2167.2" sap2010:WorkflowViewState.IdRef="Sequence_14">
                             <sap:WorkflowViewStateService.ViewState>
                               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -398,38 +405,75 @@
                                 </InArgument>
                               </ui:LogMessage.Message>
                             </ui:LogMessage>
-                            <ui:ForEach x:TypeArguments="x:Char" CurrentIndex="{x:Null}" DisplayName="For Each currentChar" sap:VirtualizedContainerService.HintSize="449.6,656" sap2010:WorkflowViewState.IdRef="ForEach`1_1" MaxIterations="{x:Null}" Values="[Equipment.Where(Function(c) c = &quot;X&quot;)]">
+                            <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_5">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="scg:List(x:String)">[Listitem]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="scg:List(x:String)">[Equipment.Split("X"c).ToList()]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <ui:ForEach x:TypeArguments="scg:List(x:String)" CurrentIndex="{x:Null}" DisplayName="For Each currentListOfText" sap:VirtualizedContainerService.HintSize="449.6,398.4" sap2010:WorkflowViewState.IdRef="ForEach`1_2" Values="[Listitem]">
                               <ui:ForEach.Body>
-                                <ActivityAction x:TypeArguments="x:Char">
+                                <ActivityAction x:TypeArguments="scg:List(x:String)">
                                   <ActivityAction.Argument>
-                                    <DelegateInArgument x:TypeArguments="x:Char" Name="currentChar" />
+                                    <DelegateInArgument x:TypeArguments="scg:List(x:String)" Name="currentListOfText" />
                                   </ActivityAction.Argument>
-                                  <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,518.4" sap2010:WorkflowViewState.IdRef="Sequence_21">
-                                    <Sequence.Variables>
-                                      <Variable x:TypeArguments="x:String" Name="OutOut" />
-                                    </Sequence.Variables>
+                                  <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_24">
                                     <sap:WorkflowViewStateService.ViewState>
                                       <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                       </scg:Dictionary>
                                     </sap:WorkflowViewStateService.ViewState>
-                                    <ui:Matches BuilderPattern="String.Join(&quot;,&quot;,TypeOfEquipment)" DisplayName="Find Matching Patterns" FirstMatch="[OutOut]" sap:VirtualizedContainerService.HintSize="353.6,92" sap2010:WorkflowViewState.IdRef="Matches_1" Input="[Equipment]" IsBuilderTabModified="True" Model="[{&quot;Index&quot;:0,&quot;OperationID&quot;:&quot;LIT&quot;,&quot;OperationName&quot;:&quot;Literal&quot;,&quot;OperationValue&quot;:&quot;String.Join(\&quot;,\&quot;,TypeOfEquipment)&quot;,&quot;QuantifierFirstValue&quot;:&quot;1&quot;,&quot;QuantifierID&quot;:&quot;EXT&quot;,&quot;QuantifierName&quot;:&quot;Exactly&quot;,&quot;QuantifierSecondValue&quot;:null}]" Pattern="String.Join(&quot;,&quot;,TypeOfEquipment)" RegexOption="IgnoreCase, Compiled" />
-                                    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[OutOut]" />
-                                    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info">
-                                      <ui:LogMessage.Message>
-                                        <InArgument x:TypeArguments="x:Object">
-                                          <VisualBasicValue x:TypeArguments="x:Object" ExpressionText="&quot;Ci siamo&quot;">
-                                            <VisualBasicValue.Result>
-                                              <OutArgument x:TypeArguments="x:Object" />
-                                            </VisualBasicValue.Result>
-                                          </VisualBasicValue>
-                                        </InArgument>
-                                      </ui:LogMessage.Message>
-                                    </ui:LogMessage>
+                                    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[currentListOfText.ToString]" />
                                   </Sequence>
                                 </ActivityAction>
                               </ui:ForEach.Body>
                             </ui:ForEach>
+                            <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="449.6,48" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+                              <ui:CommentOut.Body>
+                                <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="512,476" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <ui:ForEach x:TypeArguments="x:Char" CurrentIndex="{x:Null}" DisplayName="For Each currentChar" sap:VirtualizedContainerService.HintSize="449.6,389.6" sap2010:WorkflowViewState.IdRef="ForEach`1_1" MaxIterations="{x:Null}" Values="[Equipment.Where(Function(c) c = &quot;X&quot;)]">
+                                    <ui:ForEach.Body>
+                                      <ActivityAction x:TypeArguments="x:Char">
+                                        <ActivityAction.Argument>
+                                          <DelegateInArgument x:TypeArguments="x:Char" Name="currentChar" />
+                                        </ActivityAction.Argument>
+                                        <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_21">
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info">
+                                            <ui:LogMessage.Message>
+                                              <InArgument x:TypeArguments="x:Object">
+                                                <VisualBasicValue x:TypeArguments="x:Object" ExpressionText="&quot;Ci siamo&quot;">
+                                                  <VisualBasicValue.Result>
+                                                    <OutArgument x:TypeArguments="x:Object" />
+                                                  </VisualBasicValue.Result>
+                                                </VisualBasicValue>
+                                              </InArgument>
+                                            </ui:LogMessage.Message>
+                                          </ui:LogMessage>
+                                        </Sequence>
+                                      </ActivityAction>
+                                    </ui:ForEach.Body>
+                                  </ui:ForEach>
+                                </Sequence>
+                              </ui:CommentOut.Body>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:CommentOut>
                           </Sequence>
                         </Sequence>
                       </If.Else>
