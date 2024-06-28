@@ -1,8 +1,8 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="RetrieveRequestFromEmplyee" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:snm="clr-namespace:System.Net.Mail;assembly=System.Net.Mail" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:um="clr-namespace:UiPath.Mail;assembly=UiPath.Mail.Activities" xmlns:umab="clr-namespace:UiPath.Mail.Activities.Business;assembly=UiPath.Mail.Activities" xmlns:umabf="clr-namespace:UiPath.Mail.Activities.Business.ForEachMail;assembly=UiPath.Mail.Activities" xmlns:umm="clr-namespace:UiPath.MicrosoftOffice365.Models;assembly=UiPath.MicrosoftOffice365" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="RetrieveRequestFromEmplyee" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mewd="clr-namespace:Microsoft.Exchange.WebServices.Data;assembly=Microsoft.Exchange.WebServices" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:snm="clr-namespace:System.Net.Mail;assembly=System.Net.Mail" xmlns:ss="clr-namespace:System.Security;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:um="clr-namespace:UiPath.Mail;assembly=UiPath.Mail.Activities" xmlns:uma="clr-namespace:UiPath.MicrosoftOffice365.Activities;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umab="clr-namespace:UiPath.Mail.Activities.Business;assembly=UiPath.Mail.Activities" xmlns:umabf="clr-namespace:UiPath.Mail.Activities.Business.ForEachMail;assembly=UiPath.Mail.Activities" xmlns:umafe="clr-namespace:UiPath.MicrosoftOffice365.Activities.Files.Enums;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umam="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umame="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail.Enums;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umm="clr-namespace:UiPath.MicrosoftOffice365.Models;assembly=UiPath.MicrosoftOffice365" xmlns:usau="clr-namespace:UiPath.Shared.Activities.Utils;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="In_Dt_DetailsOrder" Type="InArgument(sd:DataTable)" />
   </x:Members>
-  <sap:VirtualizedContainerService.HintSize>1114.4,3877.6</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>1794,1280</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
@@ -71,6 +71,12 @@
       <x:String>System.Windows</x:String>
       <x:String>System.Windows.Markup</x:String>
       <x:String>System.Windows.Threading</x:String>
+      <x:String>UiPath.Shared.Services.Graph.Mail.Contracts</x:String>
+      <x:String>UiPath.MicrosoftOffice365</x:String>
+      <x:String>UiPath.Mail.IMAP.Activities</x:String>
+      <x:String>Microsoft.Exchange.WebServices.Data</x:String>
+      <x:String>UiPath.Mail.Exchange</x:String>
+      <x:String>UiPath.Mail.Exchange.Activities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -157,358 +163,480 @@
       <AssemblyReference>System.Text.RegularExpressions</AssemblyReference>
       <AssemblyReference>PresentationUI</AssemblyReference>
       <AssemblyReference>System.Windows.Presentation</AssemblyReference>
+      <AssemblyReference>Microsoft.Exchange.WebServices</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap:VirtualizedContainerService.HintSize="862.4,3812.8" sap2010:WorkflowViewState.IdRef="Sequence_4">
+  <Sequence sap:VirtualizedContainerService.HintSize="610,1215" sap2010:WorkflowViewState.IdRef="Sequence_4">
     <Sequence.Variables>
       <Variable x:TypeArguments="umm:Office365Message" Name="EmailMessage" />
-      <Variable x:TypeArguments="s:String[]" Name="TypeOfEquipment">
-        <Variable.Default>
-          <VisualBasicValue x:TypeArguments="s:String[]" ExpressionText="New String(){&quot;Cappello&quot;,&quot;Torcia&quot;,&quot;Mouse&quot;,&quot;Tastiera&quot;,&quot;Scarpe&quot;,&quot;Guanti&quot;}" />
-        </Variable.Default>
-      </Variable>
+      <Variable x:TypeArguments="s:String[]" Default="[New String(){&quot;Cappello&quot;,&quot;Torcia&quot;,&quot;Mouse&quot;,&quot;Tastiera&quot;,&quot;Scarpe&quot;,&quot;Guanti&quot;}]" Name="TypeOfEquipment" />
       <Variable x:TypeArguments="scg:List(x:String)" Name="Listitem" />
+      <Variable x:TypeArguments="x:String" Name="str_Username" />
+      <Variable x:TypeArguments="ss:SecureString" Name="scstr_Password" />
+      <Variable x:TypeArguments="scg:List(snm:MailMessage)" Name="MailMessages" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <umab:ExchangeApplicationCard ConnectionAccountName="{x:Null}" Account="rafael.casapao@acpsystemsrl.onmicrosoft.com" ApplicationId="{x:Null}" ConnectionId="{x:Null}" DisplayName="Use Outlook 365" EmailAddress="rafael.casapao@acpsystemsrl.onmicrosoft.com" sap:VirtualizedContainerService.HintSize="800,3724" sap2010:WorkflowViewState.IdRef="ExchangeApplicationCard_3" SharedMailbox="" TenantId="{x:Null}" UseConnectionService="False">
-      <umab:ExchangeApplicationCard.Body>
-        <ActivityAction x:TypeArguments="um:IMailQuickHandle">
+    <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="OutLookRafa" CacheStrategy="None" DisplayName="Get Credential" FolderPath="Inventory Management" sap:VirtualizedContainerService.HintSize="548,175" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[scstr_Password]" Username="[str_Username]" />
+    <ui:ExchangeScope ApplicationId="{x:Null}" DirectoryId="{x:Null}" Domain="{x:Null}" EmailAutodiscover="{x:Null}" ExchangeService="{x:Null}" ExistingExchangeService="{x:Null}" Password="{x:Null}" SecurePassword="{x:Null}" Server="{x:Null}" TimeoutMS="{x:Null}" User="{x:Null}" AuthenticationMode="UserNameAndPassword" DisplayName="Exchange Scope" ExchangeVersion="Exchange2007_SP1" sap:VirtualizedContainerService.HintSize="548,252" sap2010:WorkflowViewState.IdRef="ExchangeScope_1">
+      <ui:ExchangeScope.Body>
+        <ActivityAction x:TypeArguments="mewd:ExchangeService">
           <ActivityAction.Argument>
-            <DelegateInArgument x:TypeArguments="um:IMailQuickHandle" Name="Exchange" />
+            <DelegateInArgument x:TypeArguments="mewd:ExchangeService" Name="ExchangeConnection" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="766.4,3476" sap2010:WorkflowViewState.IdRef="Sequence_3">
-            <Sequence.Variables>
-              <Variable x:TypeArguments="scg:List(snm:MailMessage)" Name="RetrievedEmails" />
-            </Sequence.Variables>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="416,133" sap2010:WorkflowViewState.IdRef="Sequence_38">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <umab:ForEachEmailX DisplayName="For Each Email" sap:VirtualizedContainerService.HintSize="704,3389.6" sap2010:WorkflowViewState.IdRef="ForEachEmailX_1" IncludeSubfolders="False" NumberOfEmailsLimit="100" UnreadOnly="False" WithAttachmentsOnly="False">
-              <umab:ForEachEmailX.Body>
-                <ActivityAction x:TypeArguments="snm:MailMessage, x:Int32">
-                  <ActivityAction.Argument1>
-                    <DelegateInArgument x:TypeArguments="snm:MailMessage" Name="CurrentMail" />
-                  </ActivityAction.Argument1>
-                  <ActivityAction.Argument2>
-                    <DelegateInArgument x:TypeArguments="x:Int32" Name="CurrentIndex" />
-                  </ActivityAction.Argument2>
-                  <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="670.4,3102.4" sap2010:WorkflowViewState.IdRef="Sequence_5">
-                    <Sequence.Variables>
-                      <Variable x:TypeArguments="scg:List(x:String)" Name="RetrievedTextList" />
-                    </Sequence.Variables>
-                    <sap:WorkflowViewStateService.ViewState>
-                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                      </scg:Dictionary>
-                    </sap:WorkflowViewStateService.ViewState>
-                    <If DisplayName="If Current Email is Empty (&quot;Body&quot; is Empty)" sap:VirtualizedContainerService.HintSize="608,3016" sap2010:WorkflowViewState.IdRef="If_1">
-                      <If.Condition>
-                        <InArgument x:TypeArguments="x:Boolean">
-                          <VisualBasicValue x:TypeArguments="x:Boolean" ExpressionText="CurrentMail.Body Is Nothing">
-                            <VisualBasicValue.Result>
-                              <OutArgument x:TypeArguments="x:Boolean" />
-                            </VisualBasicValue.Result>
-                          </VisualBasicValue>
-                        </InArgument>
-                      </If.Condition>
-                      <sap:WorkflowViewStateService.ViewState>
-                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                        </scg:Dictionary>
-                      </sap:WorkflowViewStateService.ViewState>
-                      <If.Then>
-                        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_12">
+            <ui:GetExchangeMailMessages ApplicationId="{x:Null}" DirectoryId="{x:Null}" EmailAutodiscover="{x:Null}" FilterByMessageIds="{x:Null}" FilterExpression="{x:Null}" Messages="{x:Null}" Password="{x:Null}" SharedMailbox="{x:Null}" TimeoutMS="{x:Null}" AuthenticationMode="UserNameAndPassword" CustomFolder="Posta in arrivo" DisplayName="Get Exchange Mail Messages" Domain="993" ExchangeVersion="Exchange2016" GetAttachements="False" sap:VirtualizedContainerService.HintSize="354,48" sap2010:WorkflowViewState.IdRef="GetExchangeMailMessages_1" IsBodyHtml="False" MailFolder="Calendar" MarkAsRead="False" OnlyUnreadMessages="True" OrderByDate="NewestFirst" SecurePassword="[scstr_Password]" Server="outlook.office365.com" Top="30" User="[str_Username]" />
+          </Sequence>
+        </ActivityAction>
+      </ui:ExchangeScope.Body>
+    </ui:ExchangeScope>
+    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="548,244" sap2010:WorkflowViewState.IdRef="CommentOut_4">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="416,133" sap2010:WorkflowViewState.IdRef="Sequence_37">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <uma:Office365ApplicationScope ApplicationId="{x:Null}" ApplicationSecret="{x:Null}" BrowserRuntimeItemFriendlyName="{x:Null}" BrowserRuntimeItemFullPath="{x:Null}" BrowserRuntimeItemId="{x:Null}" BrowserRuntimeParentItemId="{x:Null}" CertificateAsBase64="{x:Null}" CertificatePassword="{x:Null}" ConnectionAccountName="{x:Null}" ConnectionId="{x:Null}" Connector="{x:Null}" ContinueOnError="{x:Null}" ImpersonatedUserEmailAddress="{x:Null}" ManualRuntimeItemFullPath="{x:Null}" Password="{x:Null}" SecureApplicationSecret="{x:Null}" SecurePassword="{x:Null}" TenantId="{x:Null}" Timeout="{x:Null}" Username="{x:Null}" Account="Please select an account." AuthenticationType="InteractiveToken" BrowserItemFriendlyName="OutLookRafa" BrowserItemFullPath="Inventory Management" BrowserItemId="62556" BrowserParentItemId="84272" ConfigLocation="OrchestratorAsset" DisplayName="Microsoft 365 Scope" Environment="Global" sap:VirtualizedContainerService.HintSize="354,48" sap2010:WorkflowViewState.IdRef="Office365ApplicationScope_2" OAuthApplication="UiPath" RuntimeItemInputMode="Browse" UseConnectionService="False">
+            <uma:Office365ApplicationScope.AuthenticationScopes>
+              <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+            </uma:Office365ApplicationScope.AuthenticationScopes>
+            <uma:Office365ApplicationScope.Body>
+              <ActivityAction x:TypeArguments="x:Object">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="x:Object" Name="ParentScope" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="512,533" sap2010:WorkflowViewState.IdRef="Sequence_27">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="scg:List(snm:MailMessage)" Name="RetrievedEmails" />
+                    <Variable x:TypeArguments="umm:Office365Message[]" Name="Emails" />
+                  </Sequence.Variables>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <umam:GetMail Account="{x:Null}" ContinueOnError="{x:Null}" EmailId="{x:Null}" Query="{x:Null}" Top="{x:Null}" AuthScopesInvalid="False" DisplayName="Get Mail" GetAsHTML="False" sap:VirtualizedContainerService.HintSize="450,57" sap2010:WorkflowViewState.IdRef="GetMail_2" MailFolder="Inbox" MarkAsRead="False" OnlyUnreadMessages="True" OrderByDate="NewestFirst" Results="[Emails]" />
+                  <umam:ForEachEmailConnections BrowserFolder="{x:Null}" BrowserFolderId="{x:Null}" ConnectionAccountName="{x:Null}" ConnectionId="{x:Null}" Filter="{x:Null}" Length="{x:Null}" Mailbox="{x:Null}" ManualEntryFolder="{x:Null}" AuthScopesInvalid="False" BodyAsHtml="False" DisplayName="For Each Email" sap:VirtualizedContainerService.HintSize="450,343" sap2010:WorkflowViewState.IdRef="ForEachEmailConnections_1" Importance="Any" IncludeSubfolders="False" MarkAsRead="False" MaxResults="100" OrderByDate="NewestFirst" SelectionMode="EnterPath" UnreadOnly="False" UseConnectionService="False" UseSharedMailbox="False" WithAttachmentsOnly="False">
+                    <umam:ForEachEmailConnections.Body>
+                      <ActivityAction x:TypeArguments="umm:Office365Message, x:Int32">
+                        <ActivityAction.Argument1>
+                          <DelegateInArgument x:TypeArguments="umm:Office365Message" Name="CurrentEmail" />
+                        </ActivityAction.Argument1>
+                        <ActivityAction.Argument2>
+                          <DelegateInArgument x:TypeArguments="x:Int32" Name="CurrentEmailIndex" />
+                        </ActivityAction.Argument2>
+                        <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="416,100" sap2010:WorkflowViewState.IdRef="Sequence_30">
                           <sap:WorkflowViewStateService.ViewState>
                             <scg:Dictionary x:TypeArguments="x:String, x:Object">
                               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                             </scg:Dictionary>
                           </sap:WorkflowViewStateService.ViewState>
-                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Warn">
-                            <ui:LogMessage.Message>
-                              <InArgument x:TypeArguments="x:Object">
-                                <VisualBasicValue x:TypeArguments="x:Object" ExpressionText="&quot;Current Email is Empty, no data to work to&quot;">
-                                  <VisualBasicValue.Result>
-                                    <OutArgument x:TypeArguments="x:Object" />
-                                  </VisualBasicValue.Result>
-                                </VisualBasicValue>
-                              </InArgument>
-                            </ui:LogMessage.Message>
-                          </ui:LogMessage>
                         </Sequence>
-                      </If.Then>
-                      <If.Else>
-                        <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="574.4,2602.4" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                      </ActivityAction>
+                    </umam:ForEachEmailConnections.Body>
+                    <umam:ForEachEmailConnections.FolderIdBackup>
+                      <usau:BackupSlot x:TypeArguments="umame:ItemSelectionMode" StoredValue="EnterPath">
+                        <usau:BackupSlot.BackupValues>
+                          <scg:List x:TypeArguments="x:Object" x:Key="Browse" Capacity="2">
+                            <x:Null />
+                            <x:Null />
+                          </scg:List>
+                        </usau:BackupSlot.BackupValues>
+                      </usau:BackupSlot>
+                    </umam:ForEachEmailConnections.FolderIdBackup>
+                    <umam:ForEachEmailConnections.MailboxBackup>
+                      <usau:BackupSlot x:TypeArguments="umame:MailboxSelectionMode" StoredValue="NoMailbox">
+                        <usau:BackupSlot.BackupValues>
+                          <scg:List x:TypeArguments="x:Object" x:Key="NoMailbox" Capacity="1">
+                            <x:Null />
+                          </scg:List>
+                          <scg:List x:TypeArguments="x:Object" x:Key="UseMailbox" Capacity="1">
+                            <x:Null />
+                          </scg:List>
+                        </usau:BackupSlot.BackupValues>
+                      </usau:BackupSlot>
+                    </umam:ForEachEmailConnections.MailboxBackup>
+                  </umam:ForEachEmailConnections>
+                  <umab:ForEachEmailX Mails="{x:Null}" DisplayName="For Each Email" sap:VirtualizedContainerService.HintSize="450,48" sap2010:WorkflowViewState.IdRef="ForEachEmailX_2" IncludeSubfolders="False" NumberOfEmailsLimit="100" UnreadOnly="False" WithAttachmentsOnly="False">
+                    <umab:ForEachEmailX.Body>
+                      <ActivityAction x:TypeArguments="snm:MailMessage, x:Int32">
+                        <ActivityAction.Argument1>
+                          <DelegateInArgument x:TypeArguments="snm:MailMessage" Name="CurrentMail" />
+                        </ActivityAction.Argument1>
+                        <ActivityAction.Argument2>
+                          <DelegateInArgument x:TypeArguments="x:Int32" Name="CurrentIndex" />
+                        </ActivityAction.Argument2>
+                        <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="670,3087" sap2010:WorkflowViewState.IdRef="Sequence_28">
                           <Sequence.Variables>
-                            <Variable x:TypeArguments="x:String" Name="Equipment" />
-                            <Variable x:TypeArguments="x:String" Name="Mandante" />
+                            <Variable x:TypeArguments="scg:List(x:String)" Name="RetrievedTextList" />
                           </Sequence.Variables>
                           <sap:WorkflowViewStateService.ViewState>
                             <scg:Dictionary x:TypeArguments="x:String, x:Object">
                               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                             </scg:Dictionary>
                           </sap:WorkflowViewStateService.ViewState>
-                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="512,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info">
-                            <ui:LogMessage.Message>
-                              <InArgument x:TypeArguments="x:Object">
-                                <VisualBasicValue x:TypeArguments="x:Object" ExpressionText="&quot;Current Email can be Processed&quot;">
-                                  <VisualBasicValue.Result>
-                                    <OutArgument x:TypeArguments="x:Object" />
-                                  </VisualBasicValue.Result>
-                                </VisualBasicValue>
-                              </InArgument>
-                            </ui:LogMessage.Message>
-                          </ui:LogMessage>
-                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="512,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info">
-                            <ui:LogMessage.Message>
-                              <InArgument x:TypeArguments="x:Object">
-                                <VisualBasicValue x:TypeArguments="x:Object" ExpressionText="CurrentMail.Body">
-                                  <VisualBasicValue.Result>
-                                    <OutArgument x:TypeArguments="x:Object" />
-                                  </VisualBasicValue.Result>
-                                </VisualBasicValue>
-                              </InArgument>
-                            </ui:LogMessage.Message>
-                          </ui:LogMessage>
-                          <Sequence DisplayName="Sequence Retrieve Mandante &amp; Equipment" sap:VirtualizedContainerService.HintSize="512,2167.2" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                          <If Condition="[CurrentMail.Body Is Nothing]" DisplayName="If Current Email is Empty (&quot;Body&quot; is Empty)" sap:VirtualizedContainerService.HintSize="608,3002" sap2010:WorkflowViewState.IdRef="If_2">
                             <sap:WorkflowViewStateService.ViewState>
                               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                 <x:Boolean x:Key="IsPinned">False</x:Boolean>
                               </scg:Dictionary>
                             </sap:WorkflowViewStateService.ViewState>
-                            <ui:TextToLeftRight DisplayName="Text to Left/Right" sap:VirtualizedContainerService.HintSize="449.6,306.4" sap2010:WorkflowViewState.IdRef="TextToLeftRight_3" Separator="Da:" SeparatorKey="Custom" TextToLeft="{x:Null}">
-                              <ui:TextToLeftRight.FullText>
-                                <InArgument x:TypeArguments="x:String">
-                                  <VisualBasicValue x:TypeArguments="x:String" ExpressionText="CurrentMail.Body">
-                                    <VisualBasicValue.Result>
-                                      <OutArgument x:TypeArguments="x:String" />
-                                    </VisualBasicValue.Result>
-                                  </VisualBasicValue>
-                                </InArgument>
-                              </ui:TextToLeftRight.FullText>
-                              <ui:TextToLeftRight.TextToRight>
-                                <OutArgument x:TypeArguments="x:String">
-                                  <VisualBasicReference x:TypeArguments="x:String" ExpressionText="Mandante">
-                                    <VisualBasicReference.Result>
-                                      <OutArgument x:TypeArguments="Location(x:String)" />
-                                    </VisualBasicReference.Result>
-                                  </VisualBasicReference>
-                                </OutArgument>
-                              </ui:TextToLeftRight.TextToRight>
-                            </ui:TextToLeftRight>
-                            <ui:TextToLeftRight DisplayName="Text to Left/Right" sap:VirtualizedContainerService.HintSize="449.6,306.4" sap2010:WorkflowViewState.IdRef="TextToLeftRight_2" Separator="Attrezzatura" SeparatorKey="Custom" TextToRight="{x:Null}">
-                              <ui:TextToLeftRight.FullText>
-                                <InArgument x:TypeArguments="x:String">
-                                  <VisualBasicValue x:TypeArguments="x:String" ExpressionText="Mandante">
-                                    <VisualBasicValue.Result>
-                                      <OutArgument x:TypeArguments="x:String" />
-                                    </VisualBasicValue.Result>
-                                  </VisualBasicValue>
-                                </InArgument>
-                              </ui:TextToLeftRight.FullText>
-                              <ui:TextToLeftRight.TextToLeft>
-                                <OutArgument x:TypeArguments="x:String">
-                                  <VisualBasicReference x:TypeArguments="x:String" ExpressionText="Mandante">
-                                    <VisualBasicReference.Result>
-                                      <OutArgument x:TypeArguments="Location(x:String)" />
-                                    </VisualBasicReference.Result>
-                                  </VisualBasicReference>
-                                </OutArgument>
-                              </ui:TextToLeftRight.TextToLeft>
-                            </ui:TextToLeftRight>
-                            <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_4">
-                              <Assign.To>
-                                <OutArgument x:TypeArguments="x:String">
-                                  <VisualBasicReference x:TypeArguments="x:String" ExpressionText="Mandante">
-                                    <VisualBasicReference.Result>
-                                      <OutArgument x:TypeArguments="Location(x:String)" />
-                                    </VisualBasicReference.Result>
-                                  </VisualBasicReference>
-                                </OutArgument>
-                              </Assign.To>
-                              <Assign.Value>
-                                <InArgument x:TypeArguments="x:String">
-                                  <VisualBasicValue x:TypeArguments="x:String" ExpressionText="Mandante.TrimEnd.TrimStart">
-                                    <VisualBasicValue.Result>
-                                      <OutArgument x:TypeArguments="x:String" />
-                                    </VisualBasicValue.Result>
-                                  </VisualBasicValue>
-                                </InArgument>
-                              </Assign.Value>
-                            </Assign>
-                            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info">
-                              <ui:LogMessage.Message>
-                                <InArgument x:TypeArguments="x:Object">
-                                  <VisualBasicValue x:TypeArguments="x:Object" ExpressionText="Mandante">
-                                    <VisualBasicValue.Result>
-                                      <OutArgument x:TypeArguments="x:Object" />
-                                    </VisualBasicValue.Result>
-                                  </VisualBasicValue>
-                                </InArgument>
-                              </ui:LogMessage.Message>
-                            </ui:LogMessage>
-                            <ui:TextToLeftRight DisplayName="Text to Left/Right" sap:VirtualizedContainerService.HintSize="449.6,306.4" sap2010:WorkflowViewState.IdRef="TextToLeftRight_1" Separator="Richiesta:" SeparatorKey="Custom" TextToLeft="{x:Null}">
-                              <ui:TextToLeftRight.FullText>
-                                <InArgument x:TypeArguments="x:String">
-                                  <VisualBasicValue x:TypeArguments="x:String" ExpressionText="CurrentMail.Body">
-                                    <VisualBasicValue.Result>
-                                      <OutArgument x:TypeArguments="x:String" />
-                                    </VisualBasicValue.Result>
-                                  </VisualBasicValue>
-                                </InArgument>
-                              </ui:TextToLeftRight.FullText>
-                              <ui:TextToLeftRight.TextToRight>
-                                <OutArgument x:TypeArguments="x:String">
-                                  <VisualBasicReference x:TypeArguments="x:String" ExpressionText="Equipment">
-                                    <VisualBasicReference.Result>
-                                      <OutArgument x:TypeArguments="Location(x:String)" />
-                                    </VisualBasicReference.Result>
-                                  </VisualBasicReference>
-                                </OutArgument>
-                              </ui:TextToLeftRight.TextToRight>
-                            </ui:TextToLeftRight>
-                            <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_3">
-                              <Assign.To>
-                                <OutArgument x:TypeArguments="x:String">
-                                  <VisualBasicReference x:TypeArguments="x:String" ExpressionText="Equipment">
-                                    <VisualBasicReference.Result>
-                                      <OutArgument x:TypeArguments="Location(x:String)" />
-                                    </VisualBasicReference.Result>
-                                  </VisualBasicReference>
-                                </OutArgument>
-                              </Assign.To>
-                              <Assign.Value>
-                                <InArgument x:TypeArguments="x:String">
-                                  <VisualBasicValue x:TypeArguments="x:String" ExpressionText="Equipment.TrimEnd.TrimStart">
-                                    <VisualBasicValue.Result>
-                                      <OutArgument x:TypeArguments="x:String" />
-                                    </VisualBasicValue.Result>
-                                  </VisualBasicValue>
-                                </InArgument>
-                              </Assign.Value>
-                            </Assign>
-                            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info">
-                              <ui:LogMessage.Message>
-                                <InArgument x:TypeArguments="x:Object">
-                                  <VisualBasicValue x:TypeArguments="x:Object" ExpressionText="Equipment">
-                                    <VisualBasicValue.Result>
-                                      <OutArgument x:TypeArguments="x:Object" />
-                                    </VisualBasicValue.Result>
-                                  </VisualBasicValue>
-                                </InArgument>
-                              </ui:LogMessage.Message>
-                            </ui:LogMessage>
-                            <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_5">
-                              <Assign.To>
-                                <OutArgument x:TypeArguments="scg:List(x:String)">[Listitem]</OutArgument>
-                              </Assign.To>
-                              <Assign.Value>
-                                <InArgument x:TypeArguments="scg:List(x:String)">[Equipment.Split("X"c).ToList()]</InArgument>
-                              </Assign.Value>
-                            </Assign>
-                            <ui:ForEach x:TypeArguments="scg:List(x:String)" CurrentIndex="{x:Null}" DisplayName="For Each currentListOfText" sap:VirtualizedContainerService.HintSize="449.6,398.4" sap2010:WorkflowViewState.IdRef="ForEach`1_2" Values="[Listitem]">
-                              <ui:ForEach.Body>
-                                <ActivityAction x:TypeArguments="scg:List(x:String)">
-                                  <ActivityAction.Argument>
-                                    <DelegateInArgument x:TypeArguments="scg:List(x:String)" Name="currentListOfText" />
-                                  </ActivityAction.Argument>
-                                  <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_24">
-                                    <sap:WorkflowViewStateService.ViewState>
-                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                                      </scg:Dictionary>
-                                    </sap:WorkflowViewStateService.ViewState>
-                                    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[currentListOfText.ToString]" />
-                                  </Sequence>
-                                </ActivityAction>
-                              </ui:ForEach.Body>
-                            </ui:ForEach>
-                            <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="449.6,48" sap2010:WorkflowViewState.IdRef="CommentOut_1">
-                              <ui:CommentOut.Body>
-                                <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="512,476" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                            <If.Then>
+                              <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="416,249" sap2010:WorkflowViewState.IdRef="Sequence_31">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="354,164" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Warn" Message="[&quot;Current Email is Empty, no data to work to&quot;]" />
+                              </Sequence>
+                            </If.Then>
+                            <If.Else>
+                              <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="574,2592" sap2010:WorkflowViewState.IdRef="Sequence_29">
+                                <Sequence.Variables>
+                                  <Variable x:TypeArguments="x:String" Name="Equipment" />
+                                  <Variable x:TypeArguments="x:String" Name="Mandante" />
+                                </Sequence.Variables>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="512,173" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="[&quot;Current Email can be Processed&quot;]" />
+                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="512,173" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[CurrentMail.Body]" />
+                                <Sequence DisplayName="Sequence Retrieve Mandante &amp; Equipment" sap:VirtualizedContainerService.HintSize="512,2161" sap2010:WorkflowViewState.IdRef="Sequence_35">
                                   <sap:WorkflowViewStateService.ViewState>
                                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                       <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
                                     </scg:Dictionary>
                                   </sap:WorkflowViewStateService.ViewState>
-                                  <ui:ForEach x:TypeArguments="x:Char" CurrentIndex="{x:Null}" DisplayName="For Each currentChar" sap:VirtualizedContainerService.HintSize="449.6,389.6" sap2010:WorkflowViewState.IdRef="ForEach`1_1" MaxIterations="{x:Null}" Values="[Equipment.Where(Function(c) c = &quot;X&quot;)]">
+                                  <ui:TextToLeftRight TextToLeft="{x:Null}" DisplayName="Text to Left/Right" FullText="[CurrentMail.Body]" sap:VirtualizedContainerService.HintSize="450,304" sap2010:WorkflowViewState.IdRef="TextToLeftRight_4" Separator="Da:" SeparatorKey="Custom" TextToRight="[Mandante]" />
+                                  <ui:TextToLeftRight TextToRight="{x:Null}" DisplayName="Text to Left/Right" FullText="[Mandante]" sap:VirtualizedContainerService.HintSize="450,304" sap2010:WorkflowViewState.IdRef="TextToLeftRight_5" Separator="Attrezzatura" SeparatorKey="Custom" TextToLeft="[Mandante]" />
+                                  <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_6">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[Mandante]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[Mandante.TrimEnd.TrimStart]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[Mandante]" />
+                                  <ui:TextToLeftRight TextToLeft="{x:Null}" DisplayName="Text to Left/Right" FullText="[CurrentMail.Body]" sap:VirtualizedContainerService.HintSize="449.6,306.4" sap2010:WorkflowViewState.IdRef="TextToLeftRight_6" Separator="Richiesta:" SeparatorKey="Custom" TextToRight="[Equipment]" />
+                                  <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_7">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[Equipment]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[Equipment.TrimEnd.TrimStart]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[Equipment]" />
+                                  <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_8">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="scg:List(x:String)">[Listitem]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="scg:List(x:String)">[Equipment.Split("X"c).ToList()]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:ForEach x:TypeArguments="scg:List(x:String)" CurrentIndex="{x:Null}" DisplayName="For Each currentListOfText" sap:VirtualizedContainerService.HintSize="449.6,398.4" sap2010:WorkflowViewState.IdRef="ForEach`1_3" Values="[Listitem]">
                                     <ui:ForEach.Body>
-                                      <ActivityAction x:TypeArguments="x:Char">
+                                      <ActivityAction x:TypeArguments="scg:List(x:String)">
                                         <ActivityAction.Argument>
-                                          <DelegateInArgument x:TypeArguments="x:Char" Name="currentChar" />
+                                          <DelegateInArgument x:TypeArguments="scg:List(x:String)" Name="currentListOfText" />
                                         </ActivityAction.Argument>
-                                        <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_21">
+                                        <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_32">
                                           <sap:WorkflowViewStateService.ViewState>
                                             <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                             </scg:Dictionary>
                                           </sap:WorkflowViewStateService.ViewState>
-                                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info">
-                                            <ui:LogMessage.Message>
-                                              <InArgument x:TypeArguments="x:Object">
-                                                <VisualBasicValue x:TypeArguments="x:Object" ExpressionText="&quot;Ci siamo&quot;">
-                                                  <VisualBasicValue.Result>
-                                                    <OutArgument x:TypeArguments="x:Object" />
-                                                  </VisualBasicValue.Result>
-                                                </VisualBasicValue>
-                                              </InArgument>
-                                            </ui:LogMessage.Message>
-                                          </ui:LogMessage>
+                                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[currentListOfText.ToString]" />
                                         </Sequence>
                                       </ActivityAction>
                                     </ui:ForEach.Body>
                                   </ui:ForEach>
+                                  <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="449.6,48" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+                                    <ui:CommentOut.Body>
+                                      <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="512,476" sap2010:WorkflowViewState.IdRef="Sequence_34">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:ForEach x:TypeArguments="x:Char" CurrentIndex="{x:Null}" DisplayName="For Each currentChar" sap:VirtualizedContainerService.HintSize="449.6,389.6" sap2010:WorkflowViewState.IdRef="ForEach`1_4" Values="[Equipment.Where(Function(c) c = &quot;X&quot;)]">
+                                          <ui:ForEach.Body>
+                                            <ActivityAction x:TypeArguments="x:Char">
+                                              <ActivityAction.Argument>
+                                                <DelegateInArgument x:TypeArguments="x:Char" Name="currentChar" />
+                                              </ActivityAction.Argument>
+                                              <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_33">
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="[&quot;Ci siamo&quot;]" />
+                                              </Sequence>
+                                            </ActivityAction>
+                                          </ui:ForEach.Body>
+                                        </ui:ForEach>
+                                      </Sequence>
+                                    </ui:CommentOut.Body>
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                  </ui:CommentOut>
                                 </Sequence>
-                              </ui:CommentOut.Body>
-                              <sap:WorkflowViewStateService.ViewState>
-                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                                </scg:Dictionary>
-                              </sap:WorkflowViewStateService.ViewState>
-                            </ui:CommentOut>
-                          </Sequence>
+                              </Sequence>
+                            </If.Else>
+                          </If>
                         </Sequence>
-                      </If.Else>
-                    </If>
-                  </Sequence>
-                </ActivityAction>
-              </umab:ForEachEmailX.Body>
-              <umab:ForEachEmailX.MailFilter>
-                <umabf:MailFilterArgument LogicalOperator="And">
-                  <umabf:MailFilterArgument.Filters>
-                    <scg:List x:TypeArguments="umabf:SingleMailFilterArgument" Capacity="1">
-                      <umabf:SingleMailFilterArgument DateEqualsFilter="{x:Null}" Criteria="Subject" DateFilter="SevenDays" Operator="Contains" Value="Attrezzatura" />
-                    </scg:List>
-                  </umabf:MailFilterArgument.Filters>
-                </umabf:MailFilterArgument>
-              </umab:ForEachEmailX.MailFilter>
-              <umab:ForEachEmailX.Mails>
-                <InArgument x:TypeArguments="scg:IEnumerable(snm:MailMessage)">
-                  <VisualBasicValue x:TypeArguments="scg:IEnumerable(snm:MailMessage)" ExpressionText="Exchange.Folder(&quot;Posta in arrivo&quot;)">
-                    <VisualBasicValue.Result>
-                      <OutArgument x:TypeArguments="scg:IEnumerable(snm:MailMessage)" />
-                    </VisualBasicValue.Result>
-                  </VisualBasicValue>
-                </InArgument>
-              </umab:ForEachEmailX.Mails>
-            </umab:ForEachEmailX>
-          </Sequence>
-        </ActivityAction>
-      </umab:ExchangeApplicationCard.Body>
-      <sap:WorkflowViewStateService.ViewState>
-        <scg:Dictionary x:TypeArguments="x:String, x:Object">
-          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          <x:Boolean x:Key="IsPinned">False</x:Boolean>
-        </scg:Dictionary>
-      </sap:WorkflowViewStateService.ViewState>
-    </umab:ExchangeApplicationCard>
+                      </ActivityAction>
+                    </umab:ForEachEmailX.Body>
+                    <umab:ForEachEmailX.MailFilter>
+                      <umabf:MailFilterArgument LogicalOperator="And">
+                        <umabf:MailFilterArgument.Filters>
+                          <scg:List x:TypeArguments="umabf:SingleMailFilterArgument" Capacity="1">
+                            <umabf:SingleMailFilterArgument DateEqualsFilter="{x:Null}" Criteria="Subject" DateFilter="SevenDays" Operator="Contains" Value="Attrezzatura" />
+                          </scg:List>
+                        </umabf:MailFilterArgument.Filters>
+                      </umabf:MailFilterArgument>
+                    </umab:ForEachEmailX.MailFilter>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </umab:ForEachEmailX>
+                </Sequence>
+              </ActivityAction>
+            </uma:Office365ApplicationScope.Body>
+            <uma:Office365ApplicationScope.EmailAddress>
+              <InArgument x:TypeArguments="x:String" />
+            </uma:Office365ApplicationScope.EmailAddress>
+            <uma:Office365ApplicationScope.RuntimeItemFullPathBackup>
+              <usau:BackupSlot x:TypeArguments="umafe:EDriveItemMode" StoredValue="{x:Null}">
+                <usau:BackupSlot.BackupValues>
+                  <scg:Dictionary x:TypeArguments="umafe:EDriveItemMode, scg:List(x:Object)" />
+                </usau:BackupSlot.BackupValues>
+              </usau:BackupSlot>
+            </uma:Office365ApplicationScope.RuntimeItemFullPathBackup>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </uma:Office365ApplicationScope>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="548,456" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="512,354" sap2010:WorkflowViewState.IdRef="Sequence_36">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <umab:ExchangeApplicationCard ApplicationId="{x:Null}" ConnectionAccountName="{x:Null}" ConnectionId="{x:Null}" TenantId="{x:Null}" Account="rafael.casapao@acpsystemsrl.onmicrosoft.com" DisplayName="Use Outlook 365" EmailAddress="rafael.casapao@acpsystemsrl.onmicrosoft.com" sap:VirtualizedContainerService.HintSize="450,269" sap2010:WorkflowViewState.IdRef="ExchangeApplicationCard_3" SharedMailbox="" UseConnectionService="False">
+            <umab:ExchangeApplicationCard.Body>
+              <ActivityAction x:TypeArguments="um:IMailQuickHandle">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="um:IMailQuickHandle" Name="Exchange" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="416,22" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="scg:List(snm:MailMessage)" Name="RetrievedEmails" />
+                  </Sequence.Variables>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <umab:ForEachEmailX DisplayName="For Each Email" sap:VirtualizedContainerService.HintSize="704,3369" sap2010:WorkflowViewState.IdRef="ForEachEmailX_1" IncludeSubfolders="False" Mails="[Exchange.Folder(&quot;Posta in arrivo&quot;)]" NumberOfEmailsLimit="100" UnreadOnly="False" WithAttachmentsOnly="False">
+                    <umab:ForEachEmailX.Body>
+                      <ActivityAction x:TypeArguments="snm:MailMessage, x:Int32">
+                        <ActivityAction.Argument1>
+                          <DelegateInArgument x:TypeArguments="snm:MailMessage" Name="CurrentMail" />
+                        </ActivityAction.Argument1>
+                        <ActivityAction.Argument2>
+                          <DelegateInArgument x:TypeArguments="x:Int32" Name="CurrentIndex" />
+                        </ActivityAction.Argument2>
+                        <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="670,3087" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                          <Sequence.Variables>
+                            <Variable x:TypeArguments="scg:List(x:String)" Name="RetrievedTextList" />
+                          </Sequence.Variables>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <If Condition="[CurrentMail.Body Is Nothing]" DisplayName="If Current Email is Empty (&quot;Body&quot; is Empty)" sap:VirtualizedContainerService.HintSize="608,3002" sap2010:WorkflowViewState.IdRef="If_1">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <If.Then>
+                              <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="416,249" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="354,164" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Warn" Message="[&quot;Current Email is Empty, no data to work to&quot;]" />
+                              </Sequence>
+                            </If.Then>
+                            <If.Else>
+                              <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="574,2592" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                                <Sequence.Variables>
+                                  <Variable x:TypeArguments="x:String" Name="Equipment" />
+                                  <Variable x:TypeArguments="x:String" Name="Mandante" />
+                                </Sequence.Variables>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="512,173" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Current Email can be Processed&quot;]" />
+                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="512,173" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[CurrentMail.Body]" />
+                                <Sequence DisplayName="Sequence Retrieve Mandante &amp; Equipment" sap:VirtualizedContainerService.HintSize="512,2161" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <ui:TextToLeftRight TextToLeft="{x:Null}" DisplayName="Text to Left/Right" FullText="[CurrentMail.Body]" sap:VirtualizedContainerService.HintSize="450,304" sap2010:WorkflowViewState.IdRef="TextToLeftRight_3" Separator="Da:" SeparatorKey="Custom" TextToRight="[Mandante]" />
+                                  <ui:TextToLeftRight TextToRight="{x:Null}" DisplayName="Text to Left/Right" FullText="[Mandante]" sap:VirtualizedContainerService.HintSize="450,304" sap2010:WorkflowViewState.IdRef="TextToLeftRight_2" Separator="Attrezzatura" SeparatorKey="Custom" TextToLeft="[Mandante]" />
+                                  <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_4">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[Mandante]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[Mandante.TrimEnd.TrimStart]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[Mandante]" />
+                                  <ui:TextToLeftRight TextToLeft="{x:Null}" DisplayName="Text to Left/Right" FullText="[CurrentMail.Body]" sap:VirtualizedContainerService.HintSize="449.6,306.4" sap2010:WorkflowViewState.IdRef="TextToLeftRight_1" Separator="Richiesta:" SeparatorKey="Custom" TextToRight="[Equipment]" />
+                                  <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_3">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[Equipment]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[Equipment.TrimEnd.TrimStart]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[Equipment]" />
+                                  <Assign sap:VirtualizedContainerService.HintSize="449.6,113.6" sap2010:WorkflowViewState.IdRef="Assign_5">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="scg:List(x:String)">[Listitem]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="scg:List(x:String)">[Equipment.Split("X"c).ToList()]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:ForEach x:TypeArguments="scg:List(x:String)" CurrentIndex="{x:Null}" DisplayName="For Each currentListOfText" sap:VirtualizedContainerService.HintSize="449.6,398.4" sap2010:WorkflowViewState.IdRef="ForEach`1_2" Values="[Listitem]">
+                                    <ui:ForEach.Body>
+                                      <ActivityAction x:TypeArguments="scg:List(x:String)">
+                                        <ActivityAction.Argument>
+                                          <DelegateInArgument x:TypeArguments="scg:List(x:String)" Name="currentListOfText" />
+                                        </ActivityAction.Argument>
+                                        <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_24">
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[currentListOfText.ToString]" />
+                                        </Sequence>
+                                      </ActivityAction>
+                                    </ui:ForEach.Body>
+                                  </ui:ForEach>
+                                  <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="449.6,48" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+                                    <ui:CommentOut.Body>
+                                      <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="512,476" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:ForEach x:TypeArguments="x:Char" CurrentIndex="{x:Null}" DisplayName="For Each currentChar" sap:VirtualizedContainerService.HintSize="449.6,389.6" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[Equipment.Where(Function(c) c = &quot;X&quot;)]">
+                                          <ui:ForEach.Body>
+                                            <ActivityAction x:TypeArguments="x:Char">
+                                              <ActivityAction.Argument>
+                                                <DelegateInArgument x:TypeArguments="x:Char" Name="currentChar" />
+                                              </ActivityAction.Argument>
+                                              <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="416,252" sap2010:WorkflowViewState.IdRef="Sequence_21">
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="353.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[&quot;Ci siamo&quot;]" />
+                                              </Sequence>
+                                            </ActivityAction>
+                                          </ui:ForEach.Body>
+                                        </ui:ForEach>
+                                      </Sequence>
+                                    </ui:CommentOut.Body>
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                  </ui:CommentOut>
+                                </Sequence>
+                              </Sequence>
+                            </If.Else>
+                          </If>
+                        </Sequence>
+                      </ActivityAction>
+                    </umab:ForEachEmailX.Body>
+                    <umab:ForEachEmailX.MailFilter>
+                      <umabf:MailFilterArgument LogicalOperator="And">
+                        <umabf:MailFilterArgument.Filters>
+                          <scg:List x:TypeArguments="umabf:SingleMailFilterArgument" Capacity="1">
+                            <umabf:SingleMailFilterArgument DateEqualsFilter="{x:Null}" Criteria="Subject" DateFilter="SevenDays" Operator="Contains" Value="Attrezzatura" />
+                          </scg:List>
+                        </umabf:MailFilterArgument.Filters>
+                      </umabf:MailFilterArgument>
+                    </umab:ForEachEmailX.MailFilter>
+                  </umab:ForEachEmailX>
+                </Sequence>
+              </ActivityAction>
+            </umab:ExchangeApplicationCard.Body>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </umab:ExchangeApplicationCard>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
   </Sequence>
 </Activity>
